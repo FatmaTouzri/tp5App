@@ -1,4 +1,5 @@
 [versions]
+room = "2.8.1"
 agp = "9.1.0"
 kotlin = "2.2.10"
 coreKtx = "1.17.0"
@@ -14,6 +15,9 @@ navigationFragmentKtx = "2.9.5"
 navigationUiKtx = "2.9.5"
 
 [libraries]
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" } # Pour les Coroutines Kotlin
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" } # Annotation
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

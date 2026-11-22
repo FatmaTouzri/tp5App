@@ -10,13 +10,18 @@ import androidx.navigation.fragment.findNavController
 import com.isetr.tp5app.R
 import com.isetr.tp5app.databinding.FragmentAjoutBinding
 import androidx.fragment.app.activityViewModels
-import com.isetr.tp5app.model.Etudiant
+import com.isetr.tp5app.EtudiantApplication
+import com.isetr.tp5app.data.model.Etudiant
 import com.isetr.tp5app.viewModel.EtudiantViewModel
+import com.isetr.tp5app.viewModel.EtudiantViewModelFactory
 
 class AjoutFragment : Fragment() {
 
     private var _binding: FragmentAjoutBinding? = null
-    private val etudiantViewModel: EtudiantViewModel by activityViewModels()
+    private val etudiantViewModel: EtudiantViewModel by activityViewModels {
+        val application = requireActivity().application as EtudiantApplication
+        EtudiantViewModelFactory(application.repository)
+    }
     private val binding get() = _binding!!
 
     override fun onCreateView(

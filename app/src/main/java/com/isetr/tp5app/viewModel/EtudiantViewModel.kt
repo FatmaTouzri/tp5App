@@ -3,31 +3,41 @@ package com.isetr.tp5app.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.isetr.tp5app.model.Etudiant
+import androidx.lifecycle.viewModelScope
+import com.isetr.tp5app.data.model.Etudiant
+import com.isetr.tp5app.data.repository.EtudiantRepository
+import kotlinx.coroutines.launch
 
-class EtudiantViewModel : ViewModel() {
+class EtudiantViewModel(private val repository: EtudiantRepository) : ViewModel() {
 
-    private val _etudiants= MutableLiveData<MutableList<Etudiant>>()
-    val etudiants: LiveData<MutableList<Etudiant>> = _etudiants
-    init{
-        _etudiants.value = mutableListOf(
-            Etudiant(101, "M1 Info", "ali@isetr.tn"),
-            Etudiant(102, "M2 Info", "Nadia@isetr.tn"),
-            Etudiant(103, "L1 Info", "Amel@isetr.tn"),
-            Etudiant(104, "L3 Info", "Adel@isetr.tn") )
+    val etudiants: LiveData<List<Etudiant>> = repository.allEtudiants
+
+    private val _selectedEtudiant = MutableLiveData<Etudiant?>()
+    val selectedEtudiant: LiveData<Etudiant?> = _selectedEtudiant
+    private val _etudiantsSearchResults = MutableLiveData<List<Etudiant>>()
+    val etudiantsSearchResults: LiveData<List<Etudiant>> = _etudiantsSearchResults
+
+    fun setSearchQuery(query: String) {
+        viewModelScope.launch {
+            _etudiantsSearchResults.value = repository.searchByClasse(query)
+        }
     }
-    fun addEtudiant(etudiant : Etudiant){
-        val currentList= _etudiants.value ?:mutableListOf()
-        currentList.add(etudiant)
-        _etudiants.value=currentList
-    }
-
-    private val _etudiantSelectionne = MutableLiveData<Etudiant?>()
-    val etudiantSelectionne: LiveData<Etudiant?> = _etudiantSelectionne
 
     fun selectEtudiant(etudiant: Etudiant) {
-        _etudiantSelectionne.value = etudiant
+        _selectedEtudiant.value = etudiant
     }
+    fun addEtudiant(etudiant: Etudiant) {
+        viewModelScope.launch { repository.insert(etudiant) }
+    }
+
+    fun updateEtudiant(etudiant: Etudiant) {
+        viewModelScope.launch { repository.update(etudiant) }
+    }
+
+    fun deleteEtudiant(etudiant: Etudiant) {
+        viewModelScope.launch { repository.delete(etudiant) }
+    }
+
 
 
 }

@@ -36,6 +36,5 @@
         android:id="@+id/action_ajout_to_liste"
         app:destination="@id/nav_liste"
         app:popUpTo="@id/nav_ajout"
-        app:popUpToInclusive="true"
-        />
+        app:popUpToInclusive="true" />
 </navigation>

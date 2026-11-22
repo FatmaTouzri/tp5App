@@ -6,14 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.isetr.tp5app.EtudiantApplication
 import com.isetr.tp5app.databinding.FragmentDetailBinding
 import com.isetr.tp5app.viewModel.EtudiantViewModel
+import com.isetr.tp5app.viewModel.EtudiantViewModelFactory
 
 class DetailFragment : Fragment() {
 
     private var _binding: FragmentDetailBinding? = null
     private val binding get() = _binding!!
-    private val etudiantViewModel: EtudiantViewModel by activityViewModels()
+    private val etudiantViewModel: EtudiantViewModel by activityViewModels {
+        val application = requireActivity().application as EtudiantApplication
+        EtudiantViewModelFactory(application.repository)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,7 +32,7 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        etudiantViewModel.etudiantSelectionne.observe(viewLifecycleOwner) { etudiant ->
+        etudiantViewModel.selectedEtudiant.observe(viewLifecycleOwner) { etudiant ->
             if (etudiant != null) {
                 binding.tvDetailId.text = "ID : ${etudiant.identifiant}"
                 binding.tvDetailEmail.text = "Mail : ${etudiant.email}"
